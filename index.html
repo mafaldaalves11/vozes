@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entre linhas e vozes femininas</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Lato&display=swap" rel="stylesheet">
+  <style>
+
+
+.galeria {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+.galeria .item img {
+  width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.galeria .descricao {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.carousel {
+  display: flex;
+  overflow-x: auto;
+  gap: 1rem;
+  padding: 1rem 0;
+}
+.carousel .card {
+  flex: 0 0 auto;
+  width: 200px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  text-align: center;
+  padding: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+.carousel .card:hover {
+  transform: scale(1.05);
+}
+.carousel .card img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.6);
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  max-width: 600px;
+  width: 90%;
+}
+.modal .close {
+  float: right;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+
+ #quiz-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  font-family: 'Lato', sans-serif;
+  color: #333;
+  background-color: #fdfaf6;
+  padding: 1.5rem 2rem;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(139, 46, 64, 0.2);
+}
+
+#quiz-container #question {
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+  font-weight: bold;
+}
+
+#quiz-container #options button {
+  width: 100%;
+  background-color: #8b2e40;
+  border: none;
+  color: white;
+  padding: 12px 20px;
+  margin: 8px 0;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 4px 6px rgba(139, 46, 64, 0.3);
+}
+
+#quiz-container #options button:hover:not(:disabled) {
+  background-color: #b24a5e;
+}
+
+#quiz-container #options button:disabled {
+  cursor: default;
+  opacity: 0.7;
+}
+
+#quiz-container #options button.correct {
+  background-color: #28a745 !important; /* verde */
+  box-shadow: 0 4px 6px rgba(40, 167, 69, 0.6);
+}
+
+#quiz-container #options button.incorrect {
+  background-color: #dc3545 !important; /* vermelho */
+  box-shadow: 0 4px 6px rgba(220, 53, 69, 0.6);
+}
+
+#quiz-container #next-btn {
+  background-color: #5b1f2b;
+  border: none;
+  color: white;
+  padding: 12px 30px;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 15px;
+  box-shadow: 0 4px 6px rgba(91, 31, 43, 0.5);
+  transition: background-color 0.3s ease;
+}
+
+#quiz-container #next-btn:hover {
+  background-color: #8b2e40;
+}
+
+#quiz-container #result {
+  margin-top: 20px;
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #8b2e40;
+  text-align: center;
+}
+
+.ver-mais-btn {
+  background-color: #8b2e40;
+  color: white;
+  border: none;
+  padding: 0.5rem 1.2rem;
+  font-size: 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 0.5rem;
+}
+
+.ver-mais-btn:hover {
+  background-color: #a93d53;
+}
+
+    body {
+      margin: 0;
+      font-family: 'Lato', sans-serif;
+      background-color: #fdfaf6;
+      color: #333;
+    }
+    header {
+      background-color: #8b2e40;
+      color: white;
+      padding: 2rem;
+      text-align: center;
+    }
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      margin: 0;
+    }
+    header p {
+      font-style: italic;
+      font-size: 1.2rem;
+      margin-top: 0.5rem;
+    }
+    nav {
+      background-color: #e6d3ca;
+      padding: 1rem;
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+    nav a {
+      text-decoration: none;
+      color: #8b2e40;
+      font-weight: bold;
+    }
+    section {
+      padding: 2rem;
+      max-width: 1000px;
+      margin: auto;
+    }
+    section.hero {
+      text-align: center;
+      padding: 3rem 2rem;
+      background-image: url('https://upload.wikimedia.org/wikipedia/commons/e/e0/FlorbelaEspanca.jpg');
+      background-size: cover;
+      background-position: center;
+      color: white;
+    }
+    section.hero h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      background-color: rgba(0,0,0,0.6);
+      display: inline-block;
+      padding: 1rem;
+      border-radius: 8px;
+    }
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+    }
+    .autora {
+      display: flex;
+      gap: 2rem;
+      margin-bottom: 2rem;
+      align-items: flex-start;
+    }
+    .autora img {
+      width: 150px;
+      border-radius: 8px;
+    }
+    .timeline {
+      border-left: 3px solid #8b2e40;
+      padding-left: 1rem;
+    }
+    .timeline-event {
+      margin-bottom: 1.5rem;
+    }
+    .timeline-event strong {
+      display: block;
+      font-size: 1.2rem;
+      color: #8b2e40;
+    }
+    .timeline-period {
+      font-weight: bold;
+      font-size: 1.3rem;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      color: #5b1f2b;
+    }
+    footer {
+      background-color: #8b2e40;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 3rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Entre Linhas e Vozes femininas</h1>
+    <p>A literatura portuguesa no feminino: autoras, lutas e palavras que ecoam</p>
+  </header>
+
+  <nav>
+    <a href="#linha-do-tempo">Linha do Tempo</a>
+    <a href="#autoras">Autoras</a>
+    <a href="#temas">Temas</a>
+    <a href="#obras">Obras</a>
+    <a href="#interativo">Interativo</a>
+  </nav>
+
+  <section class="hero">
+    <h2>“Ser poeta é ser mais alto.” – Florbela Espanca</h2>
+  </section>
+
+  <section class="intro">
+    <h2>Bem-vinda(o) ao projeto "Vozes de Mulher"</h2>
+    <p>Este espaço é dedicado às mulheres que moldaram e desafiaram a literatura portuguesa ao longo dos séculos. Aqui encontrarás autoras, obras, temas e experiências que ampliam o olhar sobre o papel da mulher nas letras e na sociedade.</p>
+  </section>
+
+  <section id="linha-do-tempo">
+    <h2>Linha do Tempo</h2>
+    <div class="timeline">
+      <div class="timeline-period">🏰 Século XVII</div>
+      <div class="timeline-event"><strong>1646-> Primeira poeta portuguesa a publicar uma obra com grande reconhecimento</strong> Publicação de <em>Rimas Várias</em>, de Soror Violante do Céu - um feito que se destacou num contexto em que a voz feminina na literatura era frequentemente ignorada 
+<div>
+ <button class="ver-mais-btn" aria-expanded="false">Ver Mais</button>
+<div class="ver-mais-text" style="display:none; margin-top: 0.5rem;">
+        <p><strong>Quem foi Soror Violante do Céu?</strong> Nascida em Lisboa, a 30 de maio de 1601 ou 1607, foi uma religiosa e escritora barroca portuguesa. Uma das primeiras mulheres a conquistar grande prestígio literário em Portugal e no mundo lusófono.</p>
+
+  <p><strong>Sobre a obra <em>Rimas Várias</em>:</strong> Esta obra, publicada pela primeira vez em 1646, reúne poesia sacra e profana. Escrita em estilo barroco, a obra é marcada por grande erudição, misticismo e domínio retórico. Aborda temas religiosos, amorosos e filosóficos — um feito notável para uma mulher no século XVII.</p>
+
+  <p><strong>Importância e impacto:</strong> Uma das primeiras obras de autoria feminina publicadas em vida da autora em Portugal, que causou grande admiração nos meios intelectuais — o que era raro para uma autora mulher. Foi reeditada várias vezes, sinal da sua aceitação e valorização cultural.</p>
+
+  <p>Soror Violante foi comparada a escritores como Luís de Camões, o que demonstra o seu reconhecimento da época, e é frequentemente considerada precursora da voz feminina na literatura portuguesa.</p>
+
+          <img src="https://www.nossapoesia.com/media/images/soror-violante-do-ceu_e10jBSf.jpg" alt="Retrato de Soror Violante do Céu" style="width: 20%; border-radius: 5px;">     <img src="https://catalogo.cm-ferreiradozezere.pt/cgi-bin/koha/opac-image.pl?thumbnail=1&imagenumber=6379" alt="Capa de "Rimas Várias"" style="width: 20%; border-radius: 5px;">
+      </div>
+
+
+      <div class="timeline-period">📖 Século XIX</div>
+      <div class="timeline-event"><strong>1867-> Uma das primeiras mulheres a publicar romance em Portugal</strong> Publicação da obra <em>Herança de Lágrimas</em>, de Ana Plácido
+<div>
+<button class="ver-mais-btn" onclick="toggleInfo(this)">Ver mais</button>
+<div class="timeline-info" style="display: none;">
+               <p><strong>Quem foi Ana Plácido?</strong> Nascida em 1831, Ana Plácido foi uma escritora portuguesa que se destacou como uma das pioneiras do romance em Portugal, num tempo em que poucas mulheres tinham espaço no meio literário. Além da sua carreira literária, teve uma vida marcada por experiências pessoais intensas, que influenciaram as suas obras.</p>
+
+     <p><strong>Sobre a obra <em>Herança de Lágrimas</em>:</strong> Esta obra, publicada em 1867, é um romance que aborda temas como: sofrimento, relações familiares e dilemas sociais da época. A obra destaca-se pela forma como a autora explora as emoções femininas e as dificuldades enfrentadas pelas mulheres na sociedade patriarcal do século XIX.</p>
+
+     <p><strong>Importância e impacto:</strong> A obra é considerado um marco importante na literatura portuguesa por ser uma das primeiras obras de autoras femininas a ganhar reconhecimento. Ana Plácido abriu caminho para outras mulheres escritoras e contribuiu para a visibilidade da voz feminina na narrativa literária portuguesa.</p>
+          <img src="https://www.sibila.pt/images/biografias/ana_placido_bxa.jpg" alt="Retrato de Ana Plácido" style="width: 20%; border-radius: 5px;"> <img src="https://img.wook.pt/images/heranca-de-lagrimas-ana-placido/MXwyMzA5OTE3MnwxOTAxNDE0OXwxNTU4NDQ5MzQwMDAw/500x" alt="Capa da obra "Herança de Lágrimas"" style="width:20%; border-radius: 5px;">
+
+</div>
+
+      <div class="timeline-event"><strong>1870–1880-> Primeira publicação periódica feminina dedicada à educação e emancipação da mulher</strong> <em>Almanach das Senhoras</em> dirigido por Guiomar Torresão
+<div>
+ <button class="ver-mais-btn" onclick="toggleInfo(this)">Ver mais</button>
+<div class="timeline-info" style="display: none;">
+            <p><strong>Quem foi Guiomar Torresão?</strong> Nascida em 1827, Guiomar Torresão foi uma escritora, jornalista e feminista portuguesa que se destacou pelo seu empenho na defesa dos direitos das mulheres e na promoção da sua educação. Foi ua voz pioneira na luta pela emancipação feminina em Portugal.</p>
+
+     <p><strong>Sobre o <em>Almanach das Senhoras</em>:</strong> Uma publicação periódica, dirigida durante a década de 1870 por Guiomar Torresão, que se tornou referência para o público feminino. Tinha como principais objetivos a divulgação de conteúdos educativos, literários e culturais, incentivando à reflexão sobre o papel da mulher na sociedade e promovendo o debate em torno da sua emancipação.</p>
+
+     <p><strong>Importância e impacto:</strong> Esta foi a primeira publicação periódica em Portugal orientada especialmente para as mulheres, contribuindo para o acesso ao conhecimento e o despertar do pensamento crítico feminino. Guiomar Torresão consolidou-se como um das primeiras feministas portuguesas e a sua obra influenciou gerações de mulheres que luteram por maior igualdade e direitos.</p>
+          <img src="https://debategraph.org/Handler.ashx?path=ROOT%252fu14121%252fGuiomar+Torreza%25cc%2583o.png" alt="Retrato de Guiomar Torresão" style="width: 20%; border-radius: 5px;"> <img src="https://www.ub.edu/genvipref/sites/default/files/styles/revista_/public/portadas-revistas/Almanach%20das%20Senhoras.jpg?itok=BgpTnEIl" alt="Capa duma publicação periódica "Almanach das Senhoras"" style="width:20%; border-radius: 5px;">
+</div>
+
+      <div class="timeline-event"><strong>1880->  Primeira escritora ouvida oficialmente sobre a educação das mulheres</strong> Maria Amália Vaz de Carvalho integra a “Comissão para a Educação Feminina” 
+<div>
+ <button class="ver-mais-btn" onclick="toggleInfo(this)">Ver mais</button>
+<div class="timeline-info" style="display: none;">
+           <p><strong>Quem foi Maria Amália Vaz de Carvalho?</strong> Nascida em 1847, Maria Amália Vaz de Carvalho foi uma escritora, pedagoga e jornalista portuguesa, reconhecida pela sua luta em prol da educaão feminina e pelos seus textos que defendem os direito das mulheres. Foi uma das vozes mais influentes do século XIX no debate sobre a instrução e emancipação da mulher em Portugal.</p>
+
+     <p><strong>Sobre a "Comissão para a Educação Feminina":</strong> Em 1880, Maria Amália foi convidada para integrar esta comissão governamental, marcado a primeira vez que uma escritora participou oficialmente na elaboração de políticas sobre a educação das mulheres. Esta comissão tinha como objetivo analisar e propor melhorias no ensino feminino, um passo crucial para o avanço das oportunidades educativas para as mulheres portuguesas.</p>
+
+     <p><strong>Importância e impacto:</strong> A participação da autora na comissão simboliza o reconhecimento oficial do papel das mulheres intelectuais na sociedade portuguesa. O seu trabalho contribuiu para abrir caminho para uma maior valorização da educação feminina, inlfuenciando reformas e mudanças que beneficiaram gerações futuras.</p>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/d/db/Maria_Am%C3%A1lia_Vaz_de_Carvalho.jpg" alt="Retrato de Maria Amália Vaz de Carvalho" style="max-width: 20%; border-radius: 5px;">
+</div>
+
+      <div class="timeline-period">🌹 Início do Século XX</div>
+      <div class="timeline-event"><strong>1919-> Marco na poesia feminina com uma das vozes mais marcantes da poesia portuguesa feminina</strong> Florbela Espanca publica <em>Livro de Mágoas</em> 
+<div>
+ <button class="ver-mais-btn" onclick="toggleInfo(this)">Ver mais</button>
+<div class="timeline-info" style="display: none;">
+          <p><strong>Quem foi Florbela Espanca?</strong> Nascida em 1894, Florbela Espanca foi uma poetisa portuguesa, cuja obra se destaca pela intensidade emocional. É considerada uma das maiores vozes femininas da literatura portuguesa, com uma poesia que explora o amor, a dor, a solidão e a procura pela identidade.</p>
+
+     <p><strong>Sobre a obra <em>Livro de Mágoas</em>:</strong> Publicada em 1919, a obra reúne poemas marcados por uma linguagem sensível e apaixonada, onde a autora explora sentimentos como o sofrimento amoroso, a melancolia e angústia existencial. <em>Livro de Mágoas</em> é um marco no desenvolvimento da poesia feminina em Portugal.</p>
+
+     <p><strong>Importância e impacto:</strong> Esta obra foi fundamental para afirmar a presença da mulher na poesia portuguesa, trazendo à luz temas íntimos e universais através de uma linguagem inovadora, para a época, e expressiva. Florbela Espanca influenciou gerações de poetas e continua a ser uma referência obrigatória na literatura lusófona.</p>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/d/d9/Picture_of_Florbela_Espanca.jpg" alt="Retrato de Florbela Espanca" style="max-width: 20%; border-radius: 5px;"> <img src="https://img.bertrand.pt/images/livro-de-magoas-florbela-espanca/NDV8MTI5MTc5ODZ8ODQ5MDkwM3wxMzgzNTgxNzgxMDAw/500x" alt="Edição da obra "Livro de Mágoas"" style="max-width: 20%; border-radius: 5px;">
+
+</div>
+
+      <div class="timeline-event"><strong>1925-> Primeira mulher a escrever crónicas sob pseudónimos masculinos</strong>  Irene Lisboa estreia-se no jornalismo literário com crónicas assinadas com nomes masculinos, rompendo barreiras na crítica literária
+<div>
+ <button class="ver-mais-btn" onclick="toggleInfo(this)">Ver mais</button>
+<div class="timeline-info" style="display: none;">
+          <p><strong>Quem foi Irene Lisboa?</strong> Nascida em 1892, Irene Lisboa foi uma escritora, pedagoga e cronista portuguesa. Conhecida pela sua sensibilidade, modernidade e estilo intimista, destacou-se tanto na prosa literária como na crónica jornalística. Para poder publicar e ser lidar num meio predominantemente masculino, usou pseudónimos como <em>Manuel Soares</em> e <em>João Falco</em>. </p>
+
+     <p><strong>Sobre a sua entrada no jornalismo literário:</strong> Em 1925, Irene Lisboa começou a publicar crónicas e textos de crítica sob nomes masculinos, numa época em que a mulher tinha pouca, ou nenhuma, presença neste tipo de escrita. O uso de pseudónimos foi uma estratégia para contornar os preconceitos de género e permitir que a sua voz crítica fosse ouvida e respeitada. </p>
+
+     <p><strong>Importância e impacto:</strong> A presença de Irene Lisboa na crítica literária marcou um momento decisivo para a afirmação das mulheres no jornalismo cultural em Portugal. Com uma escrita elegante, lúcida e profundamente pessoal, abriu caminhos para futuras gerações de mulheres cronistas e jornalistas.</p>
+          <img src="https://api.oestecim.pt/uploads/1/1/HistoricoProjetos/ArrudaIreneLisboa2.jpg?ExwZesikipOZCR3eISlINpZhnwrLvHocW-jhuKEQ5cfECYYvjQA9MuaYSHC4K8zu" alt="Retrato de Irene Lisboa" style="max-width: 20%; border-radius: 5px;">
+</div>
+
+      <div class="timeline-period">✊ Década de 1970</div>
+      <div class="timeline-event"><strong>1972-> Publicação de uma obra revolucionária que desafiou a censura e o regime</strong> Publicação de <em>Novas Cartas Portuguesas</em> pelas “Três Marias” — Maria Isabel Barreno, Maria Teresa Horta e Maria Velho da Costa.
+<div>
+ <button class="ver-mais-btn" onclick="toggleInfo(this)">Ver mais</button>
+<div class="timeline-info" style="display: none;">
+          <p><strong>Quem foram as "Três Marias"?</strong>Maria Isabel Barreno, Maria Teresa Horta e Maria Velho da Costa foram escritoras, feministas e intelectuais portuguesas que marcaram profundamente a literatura e a luta pelos direitos das mulheres durante o regime do Estado Novo. Uniram-se num gesto coletivo de denúncia e libertação através da escrita. </p>
+
+     <p><strong>Sobre a obra <em>Novas Cartas Portuguesas</em>:</strong> Inspirada nas <em>Cartas Portuguesas</em>, de Mariana Alcoforado, esta obra de 1972 mistura prosa, poesia, cartas e ensaio num grito contra o machismo, o colonialismo e a repressão sexual. A linguagem ousada e a crítica social foram consideradas provocatórias pelo regime, levando à censura imediata do livro. </p>
+
+     <p><strong>Importância e impacto:</strong> A publicação levou as autoras a tribunal sob acusações de atentado à moral pública. O julgamento causou indignação internacional e gerou uma onda de solidariedade feminista em vários países. <em>Novas Cartas Portuguesas</em> tornou-se um símbolo da resistência contra a opressão e da afirmação do direito das mulheres à liberdade de expressão e criação literária. É hoje uma obra incontornável do feminismo português e mundial.</p>
+          <img src="https://comunidadeculturaearte.com/wp-content/uploads/2021/06/Tre%CC%82s-Marias1.jpg" alt="Autoras da obra "As Três Marias" style="max-width: 20%; border-radius: 5px;">
+</div>
+
+      <div class="timeline-period">🇵🇹 Pós-25 de Abril (1974)</div>
+      <div class="timeline-event"><strong>1975–1980-> Explosão de publicações literárias de autoras mulheres</strong> Após o 25 de Abril, cresce significativamente o número de obras publicadas por autoras e surgem editoras com enfoque feminista
+<div>
+<button class="ver-mais-btn" onclick="toggleInfo(this)">Ver mais</button>
+<div class="timeline-info" style="display: none;">
+        <p><strong>O contexto histórico e cultural:</strong> Com a queda da ditadura do Estado Novo em 1974, Portugal vive um período de liberdade e renovação cultural. A Revolução dos Cravos não só trouxe democracia, como abriu espaço para vozes até então silenciadas — entre elas, as das mulheres escritoras.</p>
+
+     <p><strong>Sobre o fenómeno editorial:</strong> Entre 1975 e 1980, regista-se um crescimento notável na publicação de obras literárias escritas por mulheres. Surgem também editoras independentes com orientação feminista, empenhadas em dar visibilidade às questões de género, à condição feminina e às novas subjetividades das mulheres na sociedade pós-revolucionária. </p>
+
+     <p><strong>Importância e impacto:</strong> Este período marca uma viragem na literatura portuguesa contemporânea: as mulheres ganham maior protagonismo como autoras, críticas e editoras. Os temas abordados passam a incluir direitos das mulheres, sexualidade, maternidade, política e identidade. Este florescimento literário contribuiu para consolidar uma literatura no feminino, plural, crítica e transformadora.</p>
+</div>
+
+      <div class="timeline-event"><strong>1999-> Primeira mulher a receber o Prémio Camões</strong> Sophia de Mello Breyner recebe o prémio com maior distinção da literatura em língua portuguesa.
+<div>
+ <button class="ver-mais-btn" onclick="toggleInfo(this)">Ver mais</button>
+<div class="timeline-info" style="display: none;">
+         <p><strong>Quem foi Sophia de Mello Breyner Andersen?</strong> Nascida em 1919, Sophia foi uma das mais importantes poetisas portuguesas do século XX. A sua obra distingue-se pela ligação à natureza, à ética e aos valores humanos, combinando simplicidade e rigor formal. Além da poesia, destacou-se também na prosa e na escrita para crianças.</p>
+
+     <p><strong>Sobre o Prémio Camões:</strong> Criado em 1989, o Prémio Camões é a mais alta distinção literária para autores de língua portuguesa. Em 1999, Sophia tornou-se a primeira mulher a receber este reconhecimento, sublinhando a importância e a qualidade da sua obra no panorama lusófono. </p>
+
+     <p><strong>Importância e impacto:</strong>Este prémio não só homenageou uma carreira brilhante, como também abriu espaço para maior visibilidade das mulheres na literatura portuguesa. Sophia de Mello Breyner Andersen é hoje uma referência incontornável e uma inspiração para gerações de escritores.</p>
+
+          <img src="https://upload.wikimedia.org/wikipedia/en/thumb/8/80/Sophia_de_Mello_Breyner_Andresen.jpg/250px-Sophia_de_Mello_Breyner_Andresen.jpg" alt="Retrato de Sophia de Mello Breyner" style="max-width: 20%; border-radius: 5px;">
+</div>
+
+      <div class="timeline-period">🟣 Século XXI</div>
+      <div class="timeline-event"><strong>2000s-> Expansão dos estudos de género e feminismo literário em universidades portuguesas</strong> Autoras como Natália Correia, Maria Velho da Costa e Hélia Correia passam a integrar os currículos académicos como referências centrais
+<div>
+ <button class="ver-mais-btn" onclick="toggleInfo(this)">Ver mais</button>
+<div class="timeline-info" style="display: none;">
+           <p><strong>O contexto académico cultural:</strong> Com o novo milénio, os estudos literários em Portugal abrem-se a novas abordagens críticas, incluindo o feminismo, os estudos de género e a teoria queer. As universidades começam a reconhecer e valorizar a produção literária feminina como objeto central de investigação e ensino.</p>
+
+     <p><strong>Autoras em destasque:</strong> Textos de autoras como Natália Correia (com a sua escrita irreverente e política), Maria Velho da Costa (com estilo experimental e feminista) e Hélia Correia (com obras líricas e mitopoéticas) tornam-se leitura obrigatória em cursos de literatura, estudos culturais e estudos de género.</p>
+
+     <p><strong>Importância e impacto:</strong> Este movimento académico tem contribuído para a revalorização crítica de autoras até então marginalizadas, consolidando o lugar da literatura portuguesa no feminino como parte integrante da história literária nacional e internacional. </p>
+
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Violante_do_C%C3%A9u.jpg/220px-Violante_do_C%C3%A9u.jpg" alt="Retrato de Soror Violante do Céu" style="max-width: 100%; border-radius: 8px;">
+</div>
+
+      <div class="timeline-event"><strong>2015-> Segunda mulher portuguesa a receber o Prémio Camões</strong> Hélia Correia vence o Prémio Camões 
+<div>
+<button class="ver-mais-btn" onclick="toggleInfo(this)">Ver mais</button>
+<div class="timeline-info" style="display: none;">
+           <p><strong>Quem é Hélia Correira?</strong> Nascida em 1949, Hélia Correia é uma escritora com vasta obra que abrange romance, poesia e teatro. O seu estilo é marcado por um forte lirismo, referências à mitologia, e uma reflexão profunda sobre o feminino e a condição humana.</p>
+
+     <p><strong>Sobre o prémio Camões:</strong> Ao receber o Prémio Camões em 2015, Hélia Correia tornou-se a segunda mulher portuguesa a alcançar esta distinção, após Sophia de Mello Breyner. O prémio reconheceu não só o valor literário da sua obra, como também a sua originalidade estética e importância no contexto da literatura portuguesa.</p>
+
+     <p><strong>Importância e impacto:</strong> A atribuição do Prémio Camões a Hélia Correia reforça o papel das mulheres na renovação da literatura portuguesa contemporânea e consagra a sua escrita como herdeira de uma tradição literária rica, marcada pela inovação. </p>
+
+          <img src=https://camoesberlim.de/wp-content/uploads/2018/08/H%C3%A9lia-Correia-1024x747.jpg" alt="Retrato de Hélia Correia" style="max-width: 20%; border-radius: 5px;">
+</div>
+
+      <div class="timeline-event"><strong>2022-> Mulher vencedora do <em>Poetry International Prize</em></strong> Ana Luísa Amaral é homenageada internacionalmente pela sua obra poética- reconhecimento global do valor da literatura portuguesa escrita por mulheres
+<div>
+ <button class="ver-mais-btn" onclick="toggleInfo(this)">Ver mais</button>
+<div class="timeline-info" style="display: none;">
+            <p><strong>Quem foi Ana Luísa Amaral?</strong> Nascida em 1956, e falecida em 2022, Ana Luísa Amaral foi uma das mais destacadas poetisas contemporâneas portuguesas, também conhecida pelas suas traduções, estudos feministas e ensaios sobre literatura. A sua poesia alia profundidade filosófica, feminismo e uma linguagem acessível mas rica.</p>
+
+     <p><strong>Sobre o prémio internacional:</strong> Em 2022, Ana Luísa Amaral foi homenageada com o Poetry International Prize, um dos mais prestigiados prémios literários a nível mundial. Esta distinção reconheceu a força, beleza e universalidade da sua escrita poética.</p>
+
+     <p><strong>Importância e impacto:</strong> O prémio destacou não apenas a poeta, mas também a relevância da literatura portuguesa escrita por mulheres no cenário internacional. Ana Luísa Amaral tornou-se um símbolo da voz feminina contemporânea em língua portuguesa, admirada tanto pela crítica como pelo público. </p>
+          <img src="https://www.cm-pvarzim.pt/content/uploads/2019/07/ana-luisa-amaral-pat-2.jpg" alt="Retrato de Ana Luísa Amaral" style="max-width: 20%; border-radius: 5px;">
+</div>
+    </div>
+  </section>
+
+<script>
+  function toggleContent(button) {
+    const extra = button.nextElementSibling;
+    if (extra.style.display === "none") {
+      extra.style.display = "block";
+      button.textContent = "Ver menos";
+    } else {
+      extra.style.display = "none";
+      button.textContent = "Ver mais";
+    }
+  }
+</script>
+
+
+
+<section id="Autoras em destaque">
+  <h2>Autoras em destaque</h2>
+
+
+
+<div>
+<h3>As Pioneiras (século XIX e início do século XX)</h3>
+  <div class="carousel">
+
+<div class="card" onclick="openModal('mariacarvalho')">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/d/db/Maria_Am%C3%A1lia_Vaz_de_Carvalho.jpg" alt="Maria Amália Vaz de Carvalho">
+  <p>Maria Amália Vaz de Carvalho (1847-1921)</p>
+</div>
+
+<div class="card" onclick="openModal('guiomar')">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/4/49/Guiomar_Torresao_1.jpg" alt="Guiomar Torresão">
+  <p>Guiomar Torresão (1844–1898)</p>
+</div>
+
+
+<div class="card" onclick="openModal('anaplacido')">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/1/13/Ana_Placido_Fotografia.jpg" alt="Ana Plácido">
+  <p>Ana Plácido (1831–1895)</p>
+</div>
+
+<div class="card" onclick="openModal('carolinamichaelis')">
+  <img src="https://www.cdocfeminista.org/wp-content/uploads/2013/01/carolina_michaelis.jpg" alt="Carolina Michaëlis de Vasconcelos">
+  <p>Carolina Michaëlis de Vasconcelos (1851–1925)</p>
+</div>
+
+<div class="card" onclick="openModal('alicemoderno')">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Alice_Moderno.jpg/250px-Alice_Moderno.jpg" alt="Alice Moderno">
+  <p>Alice Moderno (1867–1946)</p>
+</div>
+
+<div class="card" onclick="openModal('mariaoneill')">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/9/97/D._Maria_O%27Neill_-_Brasil-Portugal_%2816Ago1912%29.png" alt="Maria O'Neill">
+  <p>Maria O'Neill (1873–1932)</p>
+</div>
+
+<div class="card" onclick="openModal('emiliacosta')">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/6/6d/D._Em%C3%ADlia_Sousa_Costa_-_Brasil-Portugal_%281Jan1914%29.png" alt="Emília de Sousa Costa">
+  <p>Emília de Sousa Costa (1877–1959)</p>
+</div>
+
+
+
+
+    </div>
+
+<div>
+<h3>Modernismo e Estado Novo</h3>
+  <div class="carousel">
+<div class="card" onclick="openModal('florbelaespanca')">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/d/d9/Picture_of_Florbela_Espanca.jpg" alt="Florbela Espanca">
+  <p>Florbela Espanca (1894–1930)</p>
+</div>
+
+  <div class="card" onclick="openModal('irenelisboa')">
+  <img src="https://www.nossapoesia.com/media/images/irene-lisboa.jpg" alt="Irene Lisboa">
+  <p>Irene Lisboa (1892–1958)</p>
+</div>
+
+    <div class="card" onclick="openModal('agustinabessa')">
+  <img src="https://fotos.web.sapo.io/i/B3513baef/19683325_JcGJh.jpeg" alt="Agustina Bessa-Luís">
+  <p>Agustina Bessa-Luís (1922–2019)</p>
+</div>
+
+   <div class="card" onclick="openModal('mariajudite')">
+  <img src="https://imagens.publico.pt/imagens.aspx/1634602?tp=UH&db=IMAGENS&type=JPG" alt="Maria Judite de Carvalho">
+  <p>Maria Judite de Carvalho (1921–1998)</p>
+</div>
+
+ <div class="card" onclick="openModal('mariateresahorta')">
+  <img src="https://www.spn.pt/Media/Default/Info/64000/600/90/9/mthorta.jpg" alt="Maria Teresa Horta">
+  <p>Maria Teresa Horta (1937–2024)</p>
+</div>
+
+<div class="card" onclick="openModal('mariaisabelbarreno')">
+  <img src="https://www.cig.gov.pt/wp-content/uploads/2016/09/barrenopk.jpg" alt="Maria Isabel Barreno">
+  <p>Maria Isabel Barreno (1939–2016)</p>
+</div>
+  
+<div class="card" onclick="openModal('mariavelhodacosta')">
+  <img src="https://www.cnc.pt/wp-content/uploads/2020/05/maria-velho-da-costa-f-1.jpg" alt="Maria Velho da Costa">
+  <p>Maria Velho da Costa (1938–2020)</p>
+</div>
+
+</div>
+
+
+    </div>
+
+<div>
+<h3>Pós-25 de Abril</h3>
+  <div class="carousel">
+<div class="card" onclick="openModal('lídiajorge')">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/L%C3%ADdia_Jorge_escritora_portuguesa.jpg/800px-L%C3%ADdia_Jorge_escritora_portuguesa.jpg" alt="Lídia Jorge">
+  <p>Lídia Jorge (n. 1946)</p>
+</div>
+
+<div class="card" onclick="openModal('héliacorreia')">
+  <img src="https://gappa.spautores.pt/img/c/46-category_default.jpg" alt="Hélia Correira">
+  <p>Hélia Correia (n. 1949)</p>
+</div>
+
+<div class="card" onclick="openModal('teolindagersão')">
+  <img src="https://imagens.publico.pt/imagens.aspx/1576323?tp=UH&db=IMAGENS&type=JPG" alt="Teolinda Gersão">
+  <p>Teolinda Gersão (n. 1940)</p>
+</div>
+
+<div class="card" onclick="openModal('anahatherly')">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Ana_Hatherly.png" alt="Ana Hatherly">
+  <p>Ana Hatherly (1929–2015)</p>
+</div>
+
+<div class="card" onclick="openModal('luisanetojorge')">
+  <img src="https://img.bertrand.pt/autor/imagem/luiza-neto-jorge/NDV8MTExNTcxN3wxNjc2NDU3MDQ3MDAwfGpwZWc=" alt="Luísa Neto Jorge">
+  <p>Luísa Neto Jorge (1939–1989)</p>
+</div>
+
+</div>
+
+
+    </div>
+
+<div>
+<h3>Autoras contemporâneas </h3>
+  <div class="carousel">
+<div class="card" onclick="openModal('dulcemariacardoso')">
+  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI7IQF08fYsxrKmibalvaKCRnkaV8FWAzEmA&s" alt="Dulce Maria Cardoso">
+  <p>Dulce Maria Cardoso (n. 1964)</p>
+</div>
+
+<div class="card" onclick="openModal('adílialopes')">
+  <img src="https://sol.sapo.pt/wp-content/uploads/2025/01/adilialopes.assirioealvim-scaled.jpg" alt="Adília Lopes">
+  <p>Adília Lopes (1960-2024)</p>
+</div>
+
+<div class="card" onclick="openModal('isabelafigueiredo')">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Isabela_Figueiredo.jpg/250px-Isabela_Figueiredo.jpg" alt="Isabela Figueiredo">
+  <p>Isabela Figueiredo (n. 1963)</p>
+</div>
+
+<div class="card" onclick="openModal('claudiasampaio')">
+  <img src="https://vozfutura.org/wp-content/uploads/2023/11/image-53.png.webp" alt="Cláudia R. Sampaio">
+  <p>Cláudia R. Sampaio (n. 1981)</p>
+</div>
+
+<div class="card" onclick="openModal('filipafonseca')">
+  <img src="https://book.apel.pt/wp-content/uploads/2024/07/Filipa-Fonseca-Silva-1.jpg" alt="Filipa Fonseca Silva">
+  <p>Filipa Fonseca Silva (n. 1979)</p>
+</div>
+
+<div class="card" onclick="openModal('helenamagalhães')">
+  <img src="https://img.wook.pt/autor/imagem/helena-magalhaes/MXwxNTU3NzMwNnwxNjg1MDI1MjI3MDAwfGpwZWc=" alt="Helena Magalhães">
+  <p>Helena Magalhães (n. 1958)</p>
+</div>
+
+<div class="card" onclick="openModal('gabrielarelvas')">
+  <img src="https://img.wook.pt/autor/imagem/gabriela-relvas/MXwxNzcxNjgwNnwxNzE1MDc5NTI0MDAwfGpwZWc=" alt="Gabriela Relvas">
+  <p>Gabriela Relvas (n. 1983)</p>
+</div>
+
+</div>
+
+<div>
+<h3>Autoras contemporâneas</h3>
+  <div class="carousel">
+<div class="card" onclick="openModal('ilselosa')">
+  <img src="https://upload.wikimedia.org/wikipedia/en/2/29/IlseLosa1.jpg" alt="Ilse Losa">
+  <p>Ilse Losa (1913–2006)</p>
+</div>
+
+<div class="card" onclick="openModal('mariaalberta')">
+  <img src="https://www.esquerda.net/sites/default/files/mariaalbertameneres_0.jpg" alt="Maria Alberta Menéres">
+  <p>Maria Alberta Menéres (1930–2019)</p>
+</div>
+
+<div class="card" onclick="openModal('madalenasáfernandes')">
+  <img src="https://penguinlivros.pt/wp-content/uploads/2025/04/0000979969.jpg" alt="Madalena Sá Fernandes">
+  <p>Madalena Sá Fernandes (n. 1993) </p>
+</div>
+
+<div class="card" onclick="openModal('mafaldasantos')">
+  <img src="https://penguinlivros.pt/wp-content/uploads/2024/01/0000966847.jpg" alt="Mafalda Santos">
+  <p>Mafalda Santos (n. 1982)</p>
+</div>
+
+<div class="card" onclick="openModal('mariaisaac')">
+  <img src="https://static.wixstatic.com/media/0162da_1abe9470c0fe4954b70723e75c7a8af8~mv2.jpeg/v1/fill/w_640,h_774,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/0162da_1abe9470c0fe4954b70723e75c7a8af8~mv2.jpeg" alt="Maria Isaac">
+  <p>Maria Isaac </p>
+</div>
+
+<div class="card" onclick="openModal('mgferrey')">
+  <img src="https://img.wook.pt/autor/imagem/m-g-ferrey/MXwyMjA4NDE2OHwxNjIxODcyNjU3MDAwfHdlYnA=" alt="M. G. Ferrey">
+  <p>M. G. Ferrey</p>
+</div>
+
+<div class="card" onclick="openModal('joanabertholo')">
+  <img src="https://img.wook.pt/autor/imagem/joana-bertholo/MXwzNTczODk4fDE1Njg4ODEzNDEwMDB8d2VicA==" alt="Joana Bértholo">
+  <p>Joana Bértholo (n. 1982)</p>
+</div>
+
+   </div>
+  
+</div>
+
+
+  <!-- Modais -->
+
+<div id="mariacarvalho" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('mariacarvalho')">&times;</span>
+    <h3>Maria Amália Vaz de Carvalho (1847-1921)</h3>
+    <p><strong>📚Obras:</strong> <em>Uma Primavera de Mulher</em>; <em>Contos para os nossos filhos</em></p>
+    <p>📝Crítica literária, ensaísta, uma das primeiras mulheres a colaborar com jornais portugueses.</p>
+    <iframe width="100%" height="200" src="https://arquivos.rtp.pt/conteudos/maria-amalia-vaz-de-carvalho/" title="Vídeo sobre Maria Amália Vaz de Carvalho" allowfullscreen></iframe>
+  </div>
+</div>
+
+<div id="guiomar" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('guiomar')">&times;</span>
+    <h3>Guiomar Torresão (1844–1898)</h3>
+    <p><strong>📚Obras:</strong> Artigos em revistas e crónicas políticas</p>
+    <p>📝Foi uma escritora portuguesa, feminista, e uma figura chave na emancipação das mulheres dos ideais da classe média em Portugal. É a fundadora do <em>Almanach das Senhoras</em>.</p>
+    <iframe width="100%" height="200" src="https://projectoadamastor.org/vozesfemininas-guiomar-torresao-1844-1898/" title="Artigo sobre Guiomar Torresão" allowfullscreen></iframe>
+  </div>
+</div>
+
+<div id="anaplacido" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('anaplacido')">&times;</span>
+    <h3>Ana Plácido (1831–1895)</h3>
+    <p><strong>📚Obras:</strong> <em>Herança de Lágrimas</em></p>
+    <p>📝Foi uma escritora portuguesa que publicou romances, crónicas, poemas, contos e participou ativamente na imprensa portuguesa e brasileira do século XIX. Teve uma vida marcada por escândalo devido à sua relação com Camilo Castelo Branco.</p>
+    <iframe width="100%" height="200" src="https://www.youtube.com/embed/mHxf2ZFMtrX0" title="Vídeo sobre Ana Plácido" allowfullscreen></iframe>
+  </div>
+</div>
+
+<div id="carolinamichaelis" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('carolinamichaelis')">&times;</span>
+    <h3>Carolina Michaëlis de Vasconcelos (1851–1925)</h3>
+    <p><strong>📚Obras:</strong> <em>Poesias de Sá de Miranda</em>, estudos linguísticos</p>
+    <p>📝Foi uma crítica literária, escritora, lexicógrafa e professora universitária de nacionalidade prussiana e portuguesa, tendo sido a primeira mulher a leccionar numa universidade portuguesa, nomeadamente na Universidade de Lisboa e posteriormente na Universidade de Coimbra, e uma das duas primeiras a entrar na Academia das Ciências. Teve igualmente grande importância como mediadora entre a cultura portuguesa e a cultura alemã.</p>
+    <iframe width="100%" height="200" src="https://comunidadeculturaearte.com/quem-foi-carolina-michaelis/" title="Artigo sobre Carolina Michaëlis" allowfullscreen></iframe>
+  </div>
+</div>
+
+<div id="alicemoderno" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('alicemoderno')">&times;</span>
+    <h3>Alice Moderno (1867–1946)</h3>
+    <p><strong>📚Obras:</strong> <em>Aspirações</em>; <em>Instincto e dever</em></p>
+    <p>📝Foi uma professora, escritora, tradutora, jornalista, publicista e poetisa, que se distinguiu como feminista e ativista dos direitos dos animais. Fundou a Sociedade Micaelense Protectora dos Animais, pioneira na protecção destes no arquipélago dos Açores.</p>
+    <iframe width="100%" height="200" src="https://www.youtube.com/embed/6YJFT9TeGsk" title="Vídeo sobre Alice Moderno" allowfullscreen></iframe>
+  </div>
+</div>
+
+<div id="mariaoneill" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('mariaoneill')">&times;</span>
+    <h3>Maria O'Neill (1873–1932)</h3>
+    <p><strong>📚Obras:</strong> <em>Versos</em>, traduções do francês</p>
+    <p>📝 Foi uma escritora, poetisa, feminista, jornalista, teosofista e tradutora com forte influência espiritualista.</p>
+    <iframe width="100%" height="200" src="https://www.youtube.com/embed/Db8nlJN2UbU" title="Vídeo sobre Maria O'Neill" allowfullscreen></iframe>
+  </div>
+</div>
+
+<div id="emiliacosta" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('emiliacosta')">&times;</span>
+    <h3>Emília de Sousa Costa (1877–1959)</h3>
+    <p><strong>📚Obras:</strong> <em>Histórias da Tia Filomena</em>, <em>Fábulas e Contos</em></p>
+    <p>📝Foi uma escritora, contista e ativista do feminismo, considerada pioneira da literatura infantil na língua portuguesa. Foi casada com o magistrado e escritor Alberto de Sousa Costa.</p>
+    <iframe width="100%" height="200" src="https://tribop.pt/TPd/Em%C3%ADlia%20de%20Sousa%20Costa" title="Obras de Emília Costa" allowfullscreen></iframe>
+  </div>
+</div>
+
+<div id="florbelaespanca" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('florbelaespanca')">&times;</span>
+    <h3>Florbela Espanca (1894–1930)</h3>
+    <p><strong>📚Obras:</strong> <em>Livro de Mágoas</em>, <em>Charneca em Flor</em></p>
+    <p>📝Foi uma poetisa portuguesa, conhecida pela sua escrita intensa e emotiva, abordando temas como o amor, a dor e a condição feminina. É considerada uma das precursoras do movimento feminista em Portugal. A sua vida, de apenas 36 anos, foi plena, embora tumultuosa, inquieta e cheia de sofrimentos íntimos, que a autora soube transformar em poesia da mais alta qualidade. Há uma biblioteca com o seu nome em Matosinhos.</p>
+    <iframe width="100%" height="200" src="https://www.youtube.com/embed/CDFAQgldX0A" title="Vídeo sobre Florbela Espanca" allowfullscreen></iframe>
+  </div>
+</div>
+
+<div id="nomeid" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('irenelisboa')">&times;</span>
+    <h3>Irene Lisboa (1892–1958)</h3>
+    <p><strong>📚Obras:</strong> Título 1, Título 2</p>
+    <p>📝Biografia curta da autora. Algo sobre o estilo, impacto e temas centrais.</p>
+    <iframe width="100%" height="200" src="LINK_YOUTUBE" title="Vídeo sobre Nome da Autora" allowfullscreen></iframe>
+  </div>
+</div>
+
+<div id="nomeid" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('nomeid')">&times;</span>
+    <h3>Nome da Autora</h3>
+    <p><strong>📚Obras:</strong> Título 1, Título 2</p>
+    <p>📝Biografia curta da autora. Algo sobre o estilo, impacto e temas centrais.</p>
+    <iframe width="100%" height="200" src="LINK_YOUTUBE" title="Vídeo sobre Nome da Autora" allowfullscreen></iframe>
+  </div>
+</div>
+
+    </div>
+</section>
+
+
+  <section id="temas">
+  <h3>Temas e Lutas</h3>
+  <p>Imagens fotográficas que representam os principais temas literários abordados pelas autoras portuguesas.</p>
+
+  <div class="galeria">
+    <div class="item">
+      <img src="https://i.ibb.co/sppP2dg0/1000001424.jpg" alt="Condição Feminina">
+      <p class="descricao">Reflexo da mulher na sociedade – fragmentos da identidade imposta.</p>
+      <div> 
+        <p> Livros recomendados: <div><em>O dia dos prodígios</em>, Lídia Jorge;
+        <em>A Sibilia</em>, Agustina Bessa-Luís;
+      <em>Os anjos</em>, Teolinda Gersão; <em>Tanta Gente, Mariana, As Palvras Poupadas</em>, Maria Judite de Carvalho</p></div>
+      </div>
+    </div>
+    <div class="item">
+      <img src="https://i.ibb.co/602mpkSW/1000001461.jpg" alt="Liberdade Sexual">
+      <p class="descricao">O corpo como território de libertação.</p>
+        <div> 
+        <p> Livros recomendados: <div><em>A Casa dos Budas Ditosos</em>, João Ubaldo Ribeiro;
+        <em>As luzes de Leonor</em>, Maria Teresa Horta;
+      <em>A Última Dona</em>, Lídia Jorge</p></div>
+      </div>
+    </div>
+    <div class="item">
+      <img src="img/censura.jpg" alt="Censura">
+      <p class="descricao">A palavra silenciada — bocas caladas e livros rasgados.</p>
+        <div> 
+        <p> Livros recomendados: <div><em>Imprensa e I Guerra Mundial
+Censura e propaganda 1914-1918</em>, Noémia Malva Novais;
+        <em>As Novas Cartas Portuguesas</em>, "Três Marias";</p></div>
+      </div>
+    </div>
+    <div class="item">
+      <img src="https://i.ibb.co/QFTW9LZc/1000001462.jpg" alt="Maternidade">
+      <p class="descricao">Entre o cuidado e o abandono — o feminino como origem.</p>
+        <div> 
+        <p> Livros recomendados: <div><em>Não se pode morar nos olhos de um gato</em>, Ana Margarida de Carvalho;
+        <em>A Mãe de um Rio</em>, Agustina Bessa-Luís;</p></div>
+      </div>
+    </div>
+    <div class="item">
+      <img src="img/identidade.jpg" alt="Identidade">
+      <p class="descricao">Máscaras e espelhos — o que é ser mulher e autora?</p>
+      <div> 
+        <p> Livros recomendados: <div><em>Fado ou Dentro de Ti Ver o Mar</em>, Inês Pedrosa;
+        <em>O Regresso de Júlia Mann a Paraty</em>, Teolinda Gersão ;</p></div>
+      </div>
+    </div>
+    <div class="item">
+      <img src="img/resistencia.jpg" alt="Resistência">
+      <p class="descricao">Punhos erguidos, livros na mão — palavras como armas.</p>
+      <p> Livros recomendados: <div><em>Mulheres da Clandestinidade: Os testemunhos de uma experiência única</em>, Vanessa de Almeida;
+         <em>O Retorno</em>, Dulce Maria Cardoso;
+         <em>Um Bailarino na Batalha</em>, Hélia Correira</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+  </section>
+
+  <section id="obras">
+    <h2>Obras</h2>
+    <p>Consulta uma galeria com capas, resumos e excertos de obras literárias escritas por mulheres portuguesas.</p>
+  </section>
+
+  <section id="quiz">
+  <h2>Quiz: Mulheres na Literatura Portuguesa</h2>
+  <div id="quiz-container">
+    <div id="question"></div>
+    <div id="options"></div>
+    <button id="next-btn" onclick="nextQuestion()">Próxima</button>
+    <div id="result"></div>
+  </div>
+</section>
+
+<script>
+  const quizData = [
+    {
+      question: "Quem publicou 'Rimas Várias' em 1646?",
+      options: ["Soror Violante do Céu","Florbela Espanca", "Ana Plácido", "Maria Amália Vaz de Carvalho"],
+      answer: 0
+    },
+    {
+      question: "Qual foi o pseudônimo coletivo das autoras das 'Novas Cartas Portuguesas'?",
+      options: ["As Três Marias", "As Três Amigas", "As Três Poetas", "As Três Camonianas"],
+      answer: 0
+    },
+    {
+      question: "Quem recebeu o Prémio Camões em 1999?",
+      options: ["Sophia de Mello Breyner", "Hélia Correia", "Ana Luísa Amaral", "Maria Velho da Costa"],
+      answer: 0
+    },
+    {
+      question: "Em que século publicou Ana Plácido 'Herança de Lágrimas'?",
+      options: ["Século XIX", "Século XVII", "Século XX", "Século XVIII"],
+      answer: 0
+    },
+    {
+      question: "Quem dirigiu o 'Almanach das Senhoras' entre 1870 e 1880?",
+      options: ["Guiomar Torresão", "Irene Lisboa", "Maria Amália Vaz de Carvalho", "Natália Correia"],
+      answer: 0
+    },
+    {
+      question: "Quem publicou 'Livro de Mágoas' em 1919?",
+      options: ["Florbela Espanca", "Soror Violante do Céu", "Sophia de Mello Breyner", "Ana Luísa Amaral"],
+      answer: 0
+    },
+    {
+      question: "Em que década foi publicado 'Novas Cartas Portuguesas'?",
+      options: ["Década de 1970", "Década de 1960", "Década de 1980", "Década de 1950"],
+      answer: 0
+    },
+    {
+      question: "Quem foi a primeira mulher a receber o Prémio Camões?",
+      options: ["Sophia de Mello Breyner", "Hélia Correia", "Ana Luísa Amaral", "Maria Velho da Costa"],
+      answer: 0
+    },
+    {
+      question: "Quem escreveu crónicas sob pseudônimos masculinos em 1925?",
+      options: ["Irene Lisboa", "Florbela Espanca", "Maria Amália Vaz de Carvalho", "Natália Correia"],
+      answer: 0
+    },
+    {
+      question: "Qual a principal temática do livro 'Novas Cartas Portuguesas'?",
+      options: ["Denúncia do machismo e repressão sexual", "Romance histórico", "Poesia barroca", "Crónicas femininas"],
+      answer: 0
+    },
+    {
+      question: "Quando ocorreu a explosão de publicações femininas após a Revolução dos Cravos?",
+      options: ["1975-1980", "1960-1965", "1985-1990", "1990-1995"],
+      answer: 0
+    },
+    {
+      question: "Qual autora foi homenageada com o Poetry International Prize em 2022?",
+      options: ["Ana Luísa Amaral", "Hélia Correia", "Sophia de Mello Breyner", "Maria Velho da Costa"],
+      answer: 0
+    },
+    {
+      question: "Quem integrou a 'Comissão para a Educação Feminina' em 1880?",
+      options: ["Maria Amália Vaz de Carvalho", "Guiomar Torresão", "Soror Violante do Céu", "Irene Lisboa"],
+      answer: 0
+    },
+    {
+      question: "Qual a importância da obra 'Rimas Várias'?",
+      options: ["Obra barroca que mistura temas religiosos e filosóficos", "Romance do século XIX", "Crónicas femininas do século XX", "Poesia modernista"],
+      answer: 0
+    },
+    {
+      question: "Quem é frequentemente considerada precursora da voz feminina na literatura portuguesa?",
+      options: ["Soror Violante do Céu", "Florbela Espanca", "Ana Plácido", "Irene Lisboa"],
+      answer: 0
+    }
+  ];
+
+  let currentQuestion = 0;
+  let score = 0;
+
+  function loadQuestion() {
+    const questionEl = document.getElementById('question');
+    const optionsEl = document.getElementById('options');
+    const resultEl = document.getElementById('result');
+    resultEl.innerHTML = '';
+    optionsEl.innerHTML = '';
+
+    let q = quizData[currentQuestion];
+    questionEl.innerText = q.question;
+
+    q.options.forEach((option, index) => {
+      const button = document.createElement('button');
+      button.innerText = option;
+      button.onclick = () => selectOption(index);
+      button.style.display = 'block';
+      button.style.margin = '0.5rem 0';
+      optionsEl.appendChild(button);
+    });
+
+    document.getElementById('next-btn').style.display = 'none';
+  }
+
+  function selectOption(selectedIndex) {
+    const q = quizData[currentQuestion];
+    const buttons = document.getElementById('options').children;
+    for(let btn of buttons) {
+      btn.disabled = true;
+    }
+
+    if (selectedIndex === q.answer) {
+      score++;
+      buttons[selectedIndex].style.backgroundColor = 'green';
+    } else {
+      buttons[selectedIndex].style.backgroundColor = 'red';
+      buttons[q.answer].style.backgroundColor = 'green';
+    }
+
+    document.getElementById('next-btn').style.display = 'inline-block';
+  }
+
+  function nextQuestion() {
+    currentQuestion++;
+    if(currentQuestion < quizData.length) {
+      loadQuestion();
+    } else {
+      showResult();
+    }
+  }
+
+  function showResult() {
+    const quizContainer = document.getElementById('quiz-container');
+    quizContainer.innerHTML = `<h3>Terminaste! Acertaste ${score} de ${quizData.length} perguntas.</h3>`;
+  }
+
+  loadQuestion();
+</script>
+
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Vozes de Mulher. Projeto educativo.</p>
+  </footer>
+<script>
+const quizData = [
+  {
+    question: "Quem publicou 'Rimas Várias' em 1646?",
+    options: ["Soror Violante do Céu", "Florbela Espanca", "Ana Plácido", "Irene Lisboa"],
+    answer: 0
+  },
+  {
+    question: "Qual foi a primeira mulher a receber o Prémio Camões?",
+    options: ["Sophia de Mello Breyner", "Hélia Correia", "Ana Luísa Amaral", "Natália Correia"],
+    answer: 0
+  },
+  {
+    question: "Em que década foi publicada 'Novas Cartas Portuguesas'?",
+    options: ["1960", "1970", "1980", "1990"],
+    answer: 1
+  },
+  // ... adiciona mais perguntas aqui ...
+];
+
+let currentQuestion = 0;
+let score = 0;
+
+const questionEl = document.getElementById('question');
+const optionsEl = document.getElementById('options');
+const nextBtn = document.getElementById('next-btn');
+const resultEl = document.getElementById('result');
+
+function loadQuestion() {
+  nextBtn.disabled = true;
+  resultEl.textContent = '';
+  questionEl.textContent = quizData[currentQuestion].question;
+  optionsEl.innerHTML = '';
+  quizData[currentQuestion].options.forEach((option, index) => {
+    const btn = document.createElement('button');
+    btn.textContent = option;
+    btn.addEventListener('click', () => selectAnswer(index, btn));
+    optionsEl.appendChild(btn);
+  });
+}
+
+function selectAnswer(selectedIndex, btn) {
+  const correctIndex = quizData[currentQuestion].answer;
+  if (selectedIndex === correctIndex) {
+    btn.classList.add('correct');
+    score++;
+  } else {
+    btn.classList.add('incorrect');
+    // destacar botão correto
+    optionsEl.children[correctIndex].classList.add('correct');
+  }
+  // desabilita todos os botões depois da resposta
+  Array.from(optionsEl.children).forEach(button => button.disabled = true);
+  nextBtn.disabled = false;
+}
+
+nextBtn.addEventListener('click', () => {
+  currentQuestion++;
+  if (currentQuestion < quizData.length) {
+    loadQuestion();
+  } else {
+    showResult();
+  }
+});
+
+function showResult() {
+  questionEl.textContent = "Fim do Quiz!";
+  optionsEl.innerHTML = '';
+  nextBtn.style.display = 'none';
+  resultEl.textContent = `Acertaste em ${score} de ${quizData.length} perguntas. Parabéns!`;
+}
+
+// carregar a primeira pergunta ao iniciar
+loadQuestion();
+
+
+  document.querySelectorAll('.ver-mais-btn').forEach(button => {
+    button.addEventListener('click', () => {
+      const expanded = button.getAttribute('aria-expanded') === 'true';
+      const text = button.parentElement.nextElementSibling;
+      if (expanded) {
+        text.style.display = 'none';
+        button.setAttribute('aria-expanded', 'false');
+        button.textContent = 'Ver Mais';
+      } else {
+        text.style.display = 'block';
+        button.setAttribute('aria-expanded', 'true');
+        button.textContent = 'Ver Menos';
+      }
+    });
+  });
+</script>
+
+
+
+<script>
+  document.querySelectorAll('.ver-mais-btn').forEach(button => {
+    button.addEventListener('click', () => {
+      const expanded = button.getAttribute('aria-expanded') === 'true';
+      const text = button.nextElementSibling;
+      if (expanded) {
+        text.style.display = 'none';
+        button.setAttribute('aria-expanded', 'false');
+        button.textContent = 'Ver Mais';
+      } else {
+        text.style.display = 'block';
+        button.setAttribute('aria-expanded', 'true');
+        button.textContent = 'Ver Menos';
+      }
+    });
+  });
+</script>
+<script>
+  function openModal(id) {
+    document.getElementById(id).style.display = 'flex';
+  }
+
+  function closeModal(id) {
+    document.getElementById(id).style.display = 'none';
+  }
+</script>
+
+</body>
+</html>
